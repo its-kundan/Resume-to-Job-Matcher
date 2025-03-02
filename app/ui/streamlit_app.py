@@ -9,6 +9,7 @@ sys.path.append(str(project_root))
 from src.preprocessing.preprocess import preprocess_text
 from src.embeddings.generate_embeddings import generate_embedding
 from src.matching.cosine_similarity import compute_similarity
+from src.Courses import ds_course, web_course, android_course, ios_course, uiux_course, resume_videos, interview_videos  # Import from Courses.py
 
 import streamlit as st
 import pandas as pd
@@ -17,12 +18,6 @@ import time
 import datetime
 import pdfplumber  # For extracting text from PDF files
 import random
-
-# Sample data for courses and videos
-ds_course = [("Data Science Course 1", "https://example.com/ds1"), ("Data Science Course 2", "https://example.com/ds2")]
-web_course = [("Web Development Course 1", "https://example.com/web1"), ("Web Development Course 2", "https://example.com/web2")]
-resume_videos = ["https://www.youtube.com/watch?v=example1", "https://www.youtube.com/watch?v=example2"]
-interview_videos = ["https://www.youtube.com/watch?v=example3", "https://www.youtube.com/watch?v=example4"]
 
 def fetch_yt_video(link):
     """
@@ -145,12 +140,12 @@ def main():
 
         # Course Recommendations
         st.subheader("**Course Recommendations🎓**")
-        course_recommender(ds_course)
+        course_recommender(ds_course)  # Use ds_course from Courses.py
 
         # YouTube Videos
         st.header("**Bonus Videos for Resume Writing & Interview Tips💡**")
-        resume_vid = random.choice(resume_videos)
-        interview_vid = random.choice(interview_videos)
+        resume_vid = random.choice(resume_videos)  # Use resume_videos from Courses.py
+        interview_vid = random.choice(interview_videos)  # Use interview_videos from Courses.py
         st.subheader("✅ **Resume Writing Tips**")
         st.video(resume_vid)
         st.subheader("✅ **Interview Preparation Tips**")
