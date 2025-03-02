@@ -3,6 +3,17 @@ from src.preprocessing.preprocess import preprocess_text
 from src.embeddings.generate_embeddings import generate_embedding
 from src.matching.cosine_similarity import compute_similarity
 
+import sys
+from pathlib import Path
+
+# Add the project root directory to sys.path
+project_root = Path(__file__).resolve().parents[2]  # Adjust the number of parents based on your folder depth
+sys.path.append(str(project_root))
+
+# Now import from src
+from src.preprocessing.preprocess import preprocess_text
+from src.embeddings.generate_embeddings import generate_embedding
+from src.matching.cosine_similarity import compute_similarity
 # Streamlit App
 st.title("Resume-to-Job Matcher")
 
