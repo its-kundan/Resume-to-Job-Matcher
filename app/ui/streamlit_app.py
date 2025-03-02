@@ -9,7 +9,9 @@ sys.path.append(str(project_root))
 from src.preprocessing.preprocess import preprocess_text
 from src.embeddings.generate_embeddings import generate_embedding
 from src.matching.cosine_similarity import compute_similarity
-from src.Courses import ds_course, web_course, android_course, ios_course, uiux_course, resume_videos, interview_videos  # Import from Courses.py
+from src.Courses import ds_course, web_course, android_course, ios_course, uiux_course, resume_videos, interview_videos
+from src.components.navigation_bar import navigation_bar  # Import navigation bar
+from src.components.footer import footer  # Import footer
 
 import streamlit as st
 import pandas as pd
@@ -19,11 +21,13 @@ import datetime
 import pdfplumber  # For extracting text from PDF files
 import random
 
+
 def fetch_yt_video(link):
     """
     Fetch YouTube video title (placeholder function).
     """
     return f"Video Title for {link}"
+
 
 def course_recommender(course_list):
     """
@@ -42,6 +46,7 @@ def course_recommender(course_list):
             break
     return rec_course
 
+
 def extract_text_from_pdf(file):
     """
     Extract text from a PDF file using pdfplumber.
@@ -52,6 +57,7 @@ def extract_text_from_pdf(file):
             text += page.extract_text()
     return text
 
+
 def calculate_resume_score(resume_text):
     """
     Calculate resume score based on the presence of key sections.
@@ -59,40 +65,64 @@ def calculate_resume_score(resume_text):
     resume_score = 0
     if 'Objective' in resume_text:
         resume_score += 20
-        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Objective</h4>''', unsafe_allow_html=True)
+        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Objective</h4>''',
+                    unsafe_allow_html=True)
     else:
-        st.markdown('''<h4 style='text-align: left; color: #fabc10;'>[-] Add a Career Objective to improve your resume.</h4>''', unsafe_allow_html=True)
+        st.markdown(
+            '''<h4 style='text-align: left; color: #fabc10;'>[-] Add a Career Objective to improve your resume.</h4>''',
+            unsafe_allow_html=True)
 
     if 'Skills' in resume_text:
         resume_score += 20
-        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Great! You have added Skills</h4>''', unsafe_allow_html=True)
+        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Great! You have added Skills</h4>''',
+                    unsafe_allow_html=True)
     else:
-        st.markdown('''<h4 style='text-align: left; color: #fabc10;'>[-] Add a Skills section to improve your resume.</h4>''', unsafe_allow_html=True)
+        st.markdown(
+            '''<h4 style='text-align: left; color: #fabc10;'>[-] Add a Skills section to improve your resume.</h4>''',
+            unsafe_allow_html=True)
 
     if 'Projects' in resume_text:
         resume_score += 20
-        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Projects</h4>''', unsafe_allow_html=True)
+        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Projects</h4>''',
+                    unsafe_allow_html=True)
     else:
-        st.markdown('''<h4 style='text-align: left; color: #fabc10;'>[-] Add a Projects section to improve your resume.</h4>''', unsafe_allow_html=True)
+        st.markdown(
+            '''<h4 style='text-align: left; color: #fabc10;'>[-] Add a Projects section to improve your resume.</h4>''',
+            unsafe_allow_html=True)
 
     if 'Experience' in resume_text:
         resume_score += 20
-        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Great! You have added Experience</h4>''', unsafe_allow_html=True)
+        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Great! You have added Experience</h4>''',
+                    unsafe_allow_html=True)
     else:
-        st.markdown('''<h4 style='text-align: left; color: #fabc10;'>[-] Add an Experience section to improve your resume.</h4>''', unsafe_allow_html=True)
+        st.markdown(
+            '''<h4 style='text-align: left; color: #fabc10;'>[-] Add an Experience section to improve your resume.</h4>''',
+            unsafe_allow_html=True)
 
     if 'Education' in resume_text:
         resume_score += 20
-        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Great! You have added Education</h4>''', unsafe_allow_html=True)
+        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>[+] Great! You have added Education</h4>''',
+                    unsafe_allow_html=True)
     else:
-        st.markdown('''<h4 style='text-align: left; color: #fabc10;'>[-] Add an Education section to improve your resume.</h4>''', unsafe_allow_html=True)
+        st.markdown(
+            '''<h4 style='text-align: left; color: #fabc10;'>[-] Add an Education section to improve your resume.</h4>''',
+            unsafe_allow_html=True)
 
     return resume_score
 
+
+# from src.components.navigation_bar import navigation_bar  # Import navigation bar
+
 def main():
     st.set_page_config(page_title="Resume-to-Job Matcher", page_icon="📄")
+
+    # Add navigation bar
+    # navigation_bar()
+
     st.title("Resume-to-Job Matcher")
-    st.markdown('''<h4 style='text-align: left; color: #d73b5c;'>* Upload your resume and job description to get started.</h4>''', unsafe_allow_html=True)
+    st.markdown(
+        '''<h4 style='text-align: left; color: #d73b5c;'>* Upload your resume and job description to get started.</h4>''',
+        unsafe_allow_html=True)
 
     # File uploaders
     resume_file = st.file_uploader("Upload Your Resume", type=["pdf", "txt"])
@@ -124,17 +154,21 @@ def main():
         # Display results
         st.header("**Resume Analysis**")
         st.subheader("**Similarity Score**")
-        st.markdown(f"<h1 style='text-align: center; color: #1ed760;'>{similarity_score:.2f}</h1>", unsafe_allow_html=True)
+        st.markdown(f"<h1 style='text-align: center; color: #1ed760;'>{similarity_score:.2f}</h1>",
+                    unsafe_allow_html=True)
 
         # Resume Score Calculation
         st.subheader("**Resume Score**")
         resume_score = calculate_resume_score(resume_text)
+
         st.markdown(f"<h1 style='text-align: center; color: #1ed760;'>{resume_score}/100</h1>", unsafe_allow_html=True)
 
         # Skill Recommendations
         st.subheader("**Skill Recommendations💡**")
         recommended_skills = ["Data Visualization", "Machine Learning", "Python", "SQL"]
-        st.markdown('''<h4 style='text-align: left; color: #1ed760;'>Adding these skills will boost your resume:</h4>''', unsafe_allow_html=True)
+        st.markdown(
+            '''<h4 style='text-align: left; color: #1ed760;'>Adding these skills will boost your resume:</h4>''',
+            unsafe_allow_html=True)
         for skill in recommended_skills:
             st.markdown(f"- {skill}")
 
@@ -150,6 +184,10 @@ def main():
         st.video(resume_vid)
         st.subheader("✅ **Interview Preparation Tips**")
         st.video(interview_vid)
+
+    # Add footer
+    footer()
+
 
 if __name__ == "__main__":
     main()
