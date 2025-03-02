@@ -1,30 +1,37 @@
-import streamlit as st
-from src.preprocessing.preprocess import preprocess_text
-from src.embeddings.generate_embeddings import generate_embedding
-from src.matching.cosine_similarity import compute_similarity
-
+# app/ui/streamlit_app.py
 import sys
-from pathlib import Path
+import os
 
-# Add the project root directory to sys.path
-project_root = Path(__file__).resolve().parents[2]  # Adjust the number of parents based on your folder depth
-sys.path.append(str(project_root))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-# Now import from src
+import streamlit as st
+import pdfplumber
 from src.preprocessing.preprocess import preprocess_text
 from src.embeddings.generate_embeddings import generate_embedding
 from src.matching.cosine_similarity import compute_similarity
-# Streamlit App
+
+def read_pdf(file):
+    with pdfplumber.open(file) as pdf:
+        first_page = pdf.pages[0]
+        return first_page.extract_text()
+
 st.title("Resume-to-Job Matcher")
 
-# File uploaders
+# File uploader
 resume_file = st.file_uploader("Upload Resume", type=["txt", "pdf"])
 job_desc_file = st.file_uploader("Upload Job Description", type=["txt", "pdf"])
 
 if resume_file and job_desc_file:
-    # Read files
-    resume_text = resume_file.read().decode("utf-8")
-    job_desc_text = job_desc_file.read().decode("utf-8")
+    # Read files based on file type
+    if resume_file.type == "application/pdf":
+        resume_text = read_pdf(resume_file)
+    else:
+        resume_text = resume_file.read().decode("utf-8")
+
+    if job_desc_file.type == "application/pdf":
+        job_desc_text = read_pdf(job_desc_file)
+    else:
+        job_desc_text = job_desc_file.read().decode("utf-8")
 
     # Preprocess text
     resume_processed = preprocess_text(resume_text)
