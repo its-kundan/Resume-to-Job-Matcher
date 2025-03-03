@@ -153,16 +153,17 @@ def main():
 
         # Display results
         st.header("**Resume Analysis**")
-        st.subheader("**Similarity Score**")
-        st.markdown(f"<h1 style='text-align: center; color: #1ed760;'>{similarity_score:.2f}</h1>",
-                    unsafe_allow_html=True)
+
+
 
         # Resume Score Calculation
         st.subheader("**Resume Score**")
         resume_score = calculate_resume_score(resume_text)
 
         st.markdown(f"<h1 style='text-align: center; color: #1ed760;'>{resume_score}/100</h1>", unsafe_allow_html=True)
-
+        st.subheader("**Similarity Score**")
+        st.markdown(f"<h1 style='text-align: center; color: #1ed760;'>{similarity_score:.2f}</h1>",
+                    unsafe_allow_html=True)
         # Skill Recommendations
         st.subheader("**Skill Recommendations💡**")
         recommended_skills = ["Data Visualization", "Machine Learning", "Python", "SQL"]
